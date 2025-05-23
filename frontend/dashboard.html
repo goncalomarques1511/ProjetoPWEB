@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Técnico</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Dashboard do Técnico</h1>
+
+    <div class="search-bar">
+      <input type="text" id="searchName" placeholder="Pesquisar por nome..." />
+      <button onclick="pesquisar()">Pesquisar</button>
+    </div>
+
+    <div class="section">
+      <h2>Resultados</h2>
+      <ul id="listaUtilizadores" class="list"></ul>
+    </div>
+
+    <div class="section">
+      <h2>Upload de Certificado</h2>
+      <div id="uploadArea" class="upload-area"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

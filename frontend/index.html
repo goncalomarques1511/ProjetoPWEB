@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Autenticação</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Bem-vindo à Plataforma</h1>
+
+    <!-- Botões para alternar entre Login e Registo -->
+    <div class="tabs">
+      <button id="btnLogin" onclick="mostrarLogin()" class="active">Login</button>
+      <button id="btnRegister" onclick="mostrarRegisto()">Registar</button>
+    </div>
+
+    <!-- Formulário de Login -->
+    <form id="loginForm" class="form">
+      <h2>Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email" required />
+      <input type="password" id="loginPassword" placeholder="Senha" required />
+      <button type="submit">Entrar</button>
+    </form>
+
+    <!-- Formulário de Registo -->
+    <form id="registerForm" class="form hidden">
+      <h2>Registar Utilizador</h2>
+      <input type="text" id="nome" placeholder="Nome completo" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Senha" required />
+      <select id="role" required>
+        <option value="">Selecione o papel</option>
+        <option value="Técnico">Técnico</option>
+        <option value="Cliente">Cliente</option>
+      </select>
+      <button type="submit">Criar Conta</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
