@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel do Gestor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Painel do Gestor de Operações</h1>
+
+    <div class="section">
+      <h2>Monitorizar Produção de Energia</h2>
+
+      <input
+        type="text"
+        id="searchCliente"
+        placeholder="Pesquisar cliente por nome"
+        oninput="pesquisarClientes()" />
+
+      <select id="clienteSelect" onchange="clienteSelecionado()">
+        <option value="">Selecione um cliente</option>
+      </select>
+
+      <button onclick="obterProducao()">Obter Produção</button>
+
+      <pre id="producaoResultado" style="white-space: pre-wrap; margin-top: 1em;"></pre>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:5000/api';
+
+    async function pesquisarClientes() {
+      const nome = document.getElementById('searchCliente')?.value;
+      const select = document.getElementById('clienteSelect');
+      if (!select) return;
+
+      select.innerHTML = '<option value="">A procurar...</option>';
+      const res = await fetch(`${API_URL}/utilizadores/pesquisar?nome=${encodeURIComponent(nome)}`);
+      const data = await res.json();
+
+      select.innerHTML = '<option value="">Selecione um cliente</option>';
+      data.forEach(cliente => {
+        const opt = document.createElement('option');
+        opt.value = cliente._id;
+        opt.textContent = `${cliente.nome} (${cliente.email})`;
+        select.appendChild(opt);
+      });
+    }
+
+    function clienteSelecionado() {
+      const id = document.getElementById('clienteSelect').value;
+      console.log(' Cliente selecionado:', id);
+    }
+
+    async function obterProducao() {
+      const idCliente = document.getElementById('clienteSelect').value;
+      if (!idCliente) return alert('Selecione um cliente primeiro');
+
+      const token = sessionStorage.getItem('token');
+      const res = await fetch(`${API_URL}/production/${idCliente}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      const data = await res.json();
+      const resultado = document.getElementById('producaoResultado');
+
+      if (res.ok) {
+        const historico = data.historico || [];
+        resultado.innerHTML = `
+ Cliente: ${data.cliente.nome} (${data.cliente.email})
+ Produção Atual: ${data.producao_kwh} kWh
+ Crédito Estimado: ${data.credito_energia}
+
+ Leituras Recentes:
+${historico.length > 0
+  ? historico.map(l => `• ${new Date(l.data).toLocaleDateString()}: ${l.kwh} kWh`).join('\n')
+  : 'Sem leituras anteriores.'}
+        `;
+      } else {
+        resultado.textContent = 'Erro: ' + (data.erro || 'Falha ao obter dados');
+      }
+    }
+  </script>
+</body>
+</html>
